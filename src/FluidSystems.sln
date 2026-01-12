@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluidSystems.Shared", "Flui
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluidSystems.Infrastructure", "FluidSystems.Infrastructure\FluidSystems.Infrastructure.csproj", "{8519389D-ABF1-B6B0-5EDC-77F490F522CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluidSystems.Core", "FluidSystems.Core\FluidSystems.Core.csproj", "{3573B6E4-4536-A13E-C20F-541F12B2E48B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{8519389D-ABF1-B6B0-5EDC-77F490F522CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8519389D-ABF1-B6B0-5EDC-77F490F522CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8519389D-ABF1-B6B0-5EDC-77F490F522CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3573B6E4-4536-A13E-C20F-541F12B2E48B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3573B6E4-4536-A13E-C20F-541F12B2E48B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3573B6E4-4536-A13E-C20F-541F12B2E48B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3573B6E4-4536-A13E-C20F-541F12B2E48B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
