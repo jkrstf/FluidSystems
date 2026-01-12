@@ -183,13 +183,13 @@
 				"category": "Valve",
 				"subType": "ThreeWay",
 				"parameters": {
-					"DefaultEdge" : "conduit_junction1",
+					"DefaultEdge" : "conduit_pipe20",
 					"AlternativeEdge" : "conduit_pipe17"
 				},
 				"parentId": "manifold_main",
 				"connectors": [
 					{ "connectedComponentId": "conduit_pipe5" },
-					{ "connectedComponentId": "conduit_junction1" },
+					{ "connectedComponentId": "conduit_pipe20" },
 					{ "connectedComponentId": "conduit_pipe17" }
 				]
 			},
@@ -199,12 +199,12 @@
 				"category": "Valve",
 				"subType": "ThreeWay",
 				"parameters": {
-					"DefaultEdge" : "conduit_pipe15",
-					"AlternativeEdge" : "conduit_pipe16"
+					"DefaultEdge" : "conduit_pipe16",
+					"AlternativeEdge" : "conduit_pipe15"
 				},
 				"parentId": "manifold_main",
 				"connectors": [
-					{ "connectedComponentId": "conduit_junction1" },
+					{ "connectedComponentId": "conduit_pipe21" },
 					{ "connectedComponentId": "conduit_pipe15" },
 					{ "connectedComponentId": "conduit_pipe16" }
 				]
@@ -220,7 +220,7 @@
 				},
 				"parentId": "manifold_main",
 				"connectors": [
-					{ "connectedComponentId": "conduit_junction1" },
+					{ "connectedComponentId": "conduit_pipe22" },
 					{ "connectedComponentId": "conduit_pipe10" },
 					{ "connectedComponentId": "conduit_pipe9" }
 				]
@@ -322,13 +322,13 @@
 			{
 				"id": "conduit_junction1",
 				"name" : "Junction",
-				"category": "Conduit",
-				"subType": "Junction",
+				"category": "Junction",
+				"subType": "T",
 				"parentId": "manifold_main",
 				"connectors": [
-					{ "connectedComponentId": "valve_b1"},
-					{ "connectedComponentId": "valve_w1" },
-					{ "connectedComponentId": "valve_a1" }
+					{ "connectedComponentId": "conduit_pipe22"},
+					{ "connectedComponentId": "conduit_pipe21" },
+					{ "connectedComponentId": "conduit_pipe20" }
 				]
 			},
 			{
@@ -438,6 +438,36 @@
 				"connectors": [
 					{ "connectedComponentId": "valve_a3" },
 					{ "connectedComponentId": "cointainer_chamber3" }
+				]
+			},
+			{
+				"id": "conduit_pipe21",
+				"category": "Conduit",
+				"subType": "Pipe",
+				"parentId": null,
+				"connectors": [
+					{ "connectedComponentId": "conduit_junction1" },
+					{ "connectedComponentId": "valve_w1" }
+				]
+			},
+			{
+				"id": "conduit_pipe22",
+				"category": "Conduit",
+				"subType": "Pipe",
+				"parentId": null,
+				"connectors": [
+					{ "connectedComponentId": "conduit_junction1" },
+					{ "connectedComponentId": "valve_b1" }
+				]
+			},
+			{
+				"id": "conduit_pipe20",
+				"category": "Conduit",
+				"subType": "Pipe",
+				"parentId": null,
+				"connectors": [
+					{ "connectedComponentId": "conduit_junction1" },
+					{ "connectedComponentId": "valve_a1" }
 				]
 			}
 		]

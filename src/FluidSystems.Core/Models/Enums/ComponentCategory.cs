@@ -8,6 +8,7 @@
         Valve,
         Conduit,
         Source,
-        Sink
+        Sink,
+        Junction
     }
 }

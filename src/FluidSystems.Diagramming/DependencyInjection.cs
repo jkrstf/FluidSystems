@@ -17,7 +17,6 @@ namespace FluidSystems.Diagramming
             services.AddSingleton<IDiagramConnectionRouter, ManhattanRouter>();
 
             services.AddSingleton<CommonRailConnectionStrategy>();
-            services.AddSingleton<JunctionConnectionStrategy>();
             services.AddSingleton<PipeConnectionStrategy>();
 
             services.AddSingleton<Dictionary<string, IDiagramConnectionStrategy>>(sp =>
@@ -25,7 +24,6 @@ namespace FluidSystems.Diagramming
                 return new Dictionary<string, IDiagramConnectionStrategy>
                 {
                     { "CommonRail", sp.GetRequiredService<CommonRailConnectionStrategy>() },
-                    { "Junction", sp.GetRequiredService<JunctionConnectionStrategy>() },
                     { "Pipe", sp.GetRequiredService<PipeConnectionStrategy>() }
                 };
             });
