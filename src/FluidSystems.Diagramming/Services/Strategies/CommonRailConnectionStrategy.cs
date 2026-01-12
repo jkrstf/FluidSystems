@@ -2,6 +2,7 @@
 using FluidSystems.Core.Services.Interfaces;
 using FluidSystems.Diagramming.Models;
 using FluidSystems.Diagramming.Models.Enums;
+using System.ComponentModel;
 
 namespace FluidSystems.Diagramming.Services.Strategies
 {
@@ -26,7 +27,7 @@ namespace FluidSystems.Diagramming.Services.Strategies
 
             var connections = new List<DiagramConnection>
             {
-                CreateMainRail(component.Id, connectedNodes, context)
+                CreateMainRail(component.Id, component.Name, connectedNodes, context)
             };
 
             var currentIndices = new Dictionary<(string, PortSide), int>();
@@ -50,7 +51,7 @@ namespace FluidSystems.Diagramming.Services.Strategies
             return new RailContext(isVertical, coordinate);
         }
 
-        private DiagramConnection CreateMainRail(string componentId, List<DiagramNode> nodes, RailContext ctx)
+        private DiagramConnection CreateMainRail(string componentId, string componentName, List<DiagramNode> nodes, RailContext ctx)
         {
             double start = nodes.Min(n => ctx.IsVertical ? n.Y + n.Height / 2 : n.X + n.Width / 2);
             double end = nodes.Max(n => ctx.IsVertical ? n.Y + n.Height / 2 : n.X + n.Width / 2);
@@ -61,7 +62,7 @@ namespace FluidSystems.Diagramming.Services.Strategies
                 ctx.IsVertical ? new DiagramPoint { X = ctx.Coordinate, Y = end } : new DiagramPoint { X = end, Y = ctx.Coordinate }
             };
 
-            var rail = new DiagramConnection { ComponentId = componentId, VisualStyle = "CommonRail" };
+            var rail = new DiagramConnection { ComponentId = componentId, Label = componentName, VisualStyle = "CommonRail" };
             rail.UpdatePath(points);
             return rail;
         }

@@ -259,6 +259,7 @@
 			},
 			{
 				"id": "conduit_pipe1",
+				"name": "1",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": null,
@@ -269,6 +270,7 @@
 			},
 			{
 				"id": "conduit_pipe2",
+				"name": "2",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": null,
@@ -279,6 +281,7 @@
 			},
 			{
 				"id": "conduit_pipe3",
+				"name": "3",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": null,
@@ -289,6 +292,7 @@
 			},
 			{
 				"id": "conduit_commonrail1",
+				"name": "4",
 				"category": "Conduit",
 				"subType": "CommonRail",
 				"parentId": "manifold_main",
@@ -301,6 +305,7 @@
 			},
 			{
 				"id": "conduit_pipe4",
+				"name": "5",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": "manifold_main",
@@ -311,6 +316,7 @@
 			},
 			{
 				"id": "conduit_pipe5",
+				"name": "6",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": "manifold_main",
@@ -333,6 +339,7 @@
 			},
 			{
 				"id": "conduit_pipe10",
+				"name": "7",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": "manifold_main",
@@ -343,6 +350,7 @@
 			},
 			{
 				"id": "conduit_pipe11",
+				"name": "8",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": "manifold_main",
@@ -353,6 +361,7 @@
 			},
 			{
 				"id": "conduit_pipe12",
+				"name": "9",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": "manifold_main",
@@ -362,6 +371,7 @@
 			},
 			{
 				"id": "conduit_pipe9",
+				"name": "10",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": "manifold_main",
@@ -372,6 +382,7 @@
 			},
 			{
 				"id": "conduit_pipe13",
+				"name": "11",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": "manifold_main",
@@ -382,6 +393,7 @@
 			},
 			{
 				"id": "conduit_pipe14",
+				"name": "12",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": "manifold_main",
@@ -392,6 +404,7 @@
 			},
 			{
 				"id": "conduit_pipe15",
+				"name": "13",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": null,
@@ -402,6 +415,7 @@
 			},
 			{
 				"id": "conduit_pipe16",
+				"name": "14",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": null,
@@ -412,6 +426,7 @@
 			},
 			{
 				"id": "conduit_pipe17",
+				"name": "15",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": null,
@@ -422,6 +437,7 @@
 			},
 			{
 				"id": "conduit_pipe18",
+				"name": "16",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": null,
@@ -432,6 +448,7 @@
 			},
 			{
 				"id": "conduit_pipe19",
+				"name": "17",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": null,
@@ -442,6 +459,7 @@
 			},
 			{
 				"id": "conduit_pipe21",
+				"name": "18",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": null,
@@ -452,6 +470,7 @@
 			},
 			{
 				"id": "conduit_pipe22",
+				"name": "19",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": null,
@@ -462,6 +481,7 @@
 			},
 			{
 				"id": "conduit_pipe20",
+				"name": "20",
 				"category": "Conduit",
 				"subType": "Pipe",
 				"parentId": null,

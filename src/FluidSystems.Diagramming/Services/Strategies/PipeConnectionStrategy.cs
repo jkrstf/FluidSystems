@@ -22,6 +22,7 @@ namespace FluidSystems.Diagramming.Services.Strategies
                 var connection = new DiagramConnection
                 {
                     ComponentId = component.Id,
+                    Label = component.Name,
                     VisualStyle = "Default"
                 };
 
