@@ -1,0 +1,35 @@
+{
+	"metadata": {
+		"version": "1.0",
+		"lastModified": "2026-01-11"
+	},
+	"content": {
+		"systemId": "manifold-01",
+		"settings": {
+			"columns": 15,
+			"rows": 11
+		},
+		"elements": {
+			"manifold_main": { "x": 2, "y": 2, "x2": 13, "y2": 8, "rotation": 0.0 },
+			"source_air": { "x": 7, "y": 10, "rotation": 0.0 },
+			"source_alcohol": { "x": 9, "y": 10, "rotation": 0.0 },
+			"source_water": { "x": 11, "y": 10, "rotation": 0.0 },
+			"valve_p1": { "x": 7, "y": 7, "rotation": 0.0 },
+			"valve_p2": { "x": 9, "y": 7, "rotation": 0.0 },
+			"valve_p3": { "x": 11, "y": 7, "rotation": 0.0 },
+			"valve_a1": { "x": 8, "y": 5, "rotation": 0.0 },
+			"valve_a2": { "x": 10, "y": 5, "rotation": 0.0 },
+			"valve_a3": { "x": 12, "y": 5, "rotation": 0.0 },
+			"valve_b1": { "x": 7, "y": 3, "rotation": 0.0 },
+			"valve_b2": { "x": 9, "y": 3, "rotation": 0.0 },
+			"valve_b3": { "x": 11, "y": 3, "rotation": 0.0 },
+			"cointainer_chamber1": { "x": 8, "y": 0, "rotation": 0.0 },
+			"cointainer_chamber2": { "x": 10, "y": 0, "rotation": 0.0 },
+			"cointainer_chamber3": { "x": 12, "y": 0, "rotation": 0.0 },
+			"valve_w1": { "x": 3, "y": 4, "rotation": 0.0 },
+			"sink_nhw": { "x": 0, "y": 3, "rotation": 0.0 },
+			"sink_hw":  { "x": 0, "y": 5, "rotation": 0.0 },
+			"conduit_junction1": { "x": 5, "y": 4, "rotation": 0.0 }
+		}
+	}
+}
