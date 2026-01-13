@@ -1,0 +1,18 @@
+﻿<UserControl
+    x:Class="FluidSystems.UI.WPF.Views.ControlPanels.ManualControlViews"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:FluidSystems.UI.WPF.Views.ControlPanels"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:Background="White"
+    mc:Ignorable="d">
+    <StackPanel VerticalAlignment="Top" Orientation="Horizontal">
+        <Button
+            Height="25"
+            Margin="4"
+            Command="{Binding ActivateCommand}"
+            Content="Activate selected component" />
+        <TextBlock Foreground="Red" Text="{Binding StatusMessage}" />
+    </StackPanel>
+</UserControl>

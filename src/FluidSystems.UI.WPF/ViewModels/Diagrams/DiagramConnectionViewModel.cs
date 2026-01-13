@@ -3,7 +3,7 @@ using FluidSystems.Diagramming.Models;
 using System.Windows;
 using System.Windows.Media;
 
-namespace FluidSystems.UI.WPF.ViewModels
+namespace FluidSystems.UI.WPF.ViewModels.Diagrams
 {
     public partial class DiagramConnectionViewModel : ObservableObject
     {

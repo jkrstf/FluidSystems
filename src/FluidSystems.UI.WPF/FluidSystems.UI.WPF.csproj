@@ -10,9 +10,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\layouts\manifold-01_layout.json" />
+    <None Remove="Resources\systems\manifold-01.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
     <PackageReference Include="Wpf.Controls.PanAndZoom" Version="2.3.4" />
   </ItemGroup>
 
@@ -20,6 +26,30 @@
     <ProjectReference Include="..\FluidSystems.Control\FluidSystems.Control.csproj" />
     <ProjectReference Include="..\FluidSystems.Core\FluidSystems.Core.csproj" />
     <ProjectReference Include="..\FluidSystems.Diagramming\FluidSystems.Diagramming.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\layouts\manifold-01_layout.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\systems\manifold-01.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Texts.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Texts.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Texts.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Texts.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

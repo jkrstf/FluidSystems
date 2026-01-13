@@ -1,0 +1,58 @@
+﻿<UserControl
+    x:Class="FluidSystems.UI.WPF.Views.Main.HomeView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controlPanels="clr-namespace:FluidSystems.UI.WPF.Views.ControlPanels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:diagnostics="clr-namespace:FluidSystems.UI.WPF.Views.Diagnostics"
+    xmlns:diagrams="clr-namespace:FluidSystems.UI.WPF.Views.Diagrams"
+    xmlns:local="clr-namespace:FluidSystems.UI.WPF.Views.Main"
+    xmlns:logs="clr-namespace:FluidSystems.UI.WPF.Views.SystemLogs"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resources="clr-namespace:FluidSystems.UI.WPF.Resources"
+    xmlns:vmCtrl="clr-namespace:FluidSystems.UI.WPF.ViewModels.ControlPanels"
+    xmlns:vmDiag="clr-namespace:FluidSystems.UI.WPF.ViewModels.Diagnostics"
+    xmlns:vmDiagrm="clr-namespace:FluidSystems.UI.WPF.ViewModels.Diagrams"
+    xmlns:vmLogs="clr-namespace:FluidSystems.UI.WPF.ViewModels.SystemLogs"
+    d:Background="White"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type vmDiagrm:DiagramViewModel}">
+            <diagrams:DiagramView Width="{Binding DataContext.DiagramWidth, RelativeSource={RelativeSource AncestorType=UserControl}}" Height="{Binding DataContext.DiagramHeight, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmDiag:DiagnosticsViewModel}">
+            <diagnostics:DiagnosticsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmCtrl:ControlPanelViewModel}">
+            <controlPanels:ControlPanelView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmLogs:LogsViewModel}">
+            <logs:LogsView />
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <GroupBox Header="{x:Static resources:Texts.PipingAndInstrumentationDiagram}">
+            <ContentControl Content="{Binding DiagramContent}" />
+        </GroupBox>
+        <GroupBox Grid.Column="1" Header="{x:Static resources:Texts.Details}">
+            <ContentControl Content="{Binding DiagnosticsViewModel}" />
+        </GroupBox>
+        <GroupBox Grid.Row="1" Header="{x:Static resources:Texts.ControlPanel}">
+            <ContentControl Content="{Binding ControlPanelViewModel}" />
+        </GroupBox>
+        <GroupBox
+            Grid.Row="1"
+            Grid.Column="1"
+            Header="{x:Static resources:Texts.Logs}">
+            <ContentControl Content="{Binding LogsViewModel}" />
+        </GroupBox>
+    </Grid>
+</UserControl>

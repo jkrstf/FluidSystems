@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using FluidSystems.Diagramming.Models;
 using System.Windows.Media;
 
-namespace FluidSystems.UI.WPF.ViewModels
+namespace FluidSystems.UI.WPF.ViewModels.Diagrams
 {
     public partial class DiagramNodeViewModel : ObservableObject
     {
@@ -47,9 +47,6 @@ namespace FluidSystems.UI.WPF.ViewModels
             };
         }
 
-        [RelayCommand] private void ToggleComponent(string? id)
-        {
-            ComponentSelected?.Invoke(this, id);
-        }
+        [RelayCommand] private void ToggleComponent(string? id) => ComponentSelected?.Invoke(this, id);
     }
 }
