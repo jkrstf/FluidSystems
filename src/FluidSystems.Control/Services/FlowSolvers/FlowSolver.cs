@@ -11,7 +11,7 @@ namespace FluidSystems.Control.Services.Flow
     {
         public void UpdateFlows(SimulationContext context)
         {
-            context.FluidState.Materials.Clear();
+            InitializeInitialState(context);
             var sources = context.System.Components.Where(component => component.Category == ComponentCategory.Source);
 
             var queue = new Queue<(string nodeId, string material)>();
@@ -49,6 +49,20 @@ namespace FluidSystems.Control.Services.Flow
                     {
                         context.SetMaterial(currentNodeId, material);
                     }
+                }
+            }
+        }
+
+        private void InitializeInitialState(SimulationContext context)
+        {
+            context.FluidState.Materials.Clear();
+            if (context?.System?.Components == null) return;
+
+            foreach (var component in context.System.Components)
+            {
+                if (component.Category != ComponentCategory.Source)
+                {
+                    context.SetMaterial(component.Id, "Air");
                 }
             }
         }

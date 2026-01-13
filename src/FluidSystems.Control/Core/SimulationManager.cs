@@ -19,6 +19,7 @@ namespace FluidSystems.Control.Core
             if (_context != null) _context.ComponentBehaviorChanged -= context_ComponentBehaviorChanged;
             _context = context;
             _context.ComponentBehaviorChanged += context_ComponentBehaviorChanged;
+            _solver.UpdateFlows(context);
         }
 
         private void context_ComponentBehaviorChanged(object? sender, string e)

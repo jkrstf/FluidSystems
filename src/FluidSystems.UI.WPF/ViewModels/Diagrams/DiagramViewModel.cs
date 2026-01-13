@@ -23,6 +23,7 @@ namespace FluidSystems.UI.WPF.ViewModels.Diagrams
         {
             _context = context;
             _context.Initialized += OnSimulationContextInitialized;
+            _context.ComponentStateChanged += Context_ComponentStateChanged;
             _diagramBuilder = diagramBuilder;
         }
 
@@ -43,9 +44,6 @@ namespace FluidSystems.UI.WPF.ViewModels.Diagrams
 
         private void UpdateDiagram(SystemDiagram diagram)
         {
-            _context.ComponentStateChanged -= Context_ComponentStateChanged;
-            _context.ComponentStateChanged += Context_ComponentStateChanged;
-
             foreach (var node in Nodes) node.ComponentSelected -= OnComponentSelected;
             Nodes.Clear();
             foreach (var nodeModel in diagram.Nodes)
@@ -57,6 +55,7 @@ namespace FluidSystems.UI.WPF.ViewModels.Diagrams
 
             Connections.Clear();
             foreach (var connModel in diagram.Connections) Connections.Add(new DiagramConnectionViewModel(connModel));
+            foreach (var component in _context.System.Components) Context_ComponentStateChanged(this, component.Id);
         }
 
         private void OnComponentSelected(object? sender, string componentId) => ComponentSelected?.Invoke(this, componentId);
