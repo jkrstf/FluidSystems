@@ -1,4 +1,3 @@
-﻿using FluidSystems.Control.Behaviors.Chamber;
 using FluidSystems.Control.Behaviors.Valves;
 using FluidSystems.Control.Core;
 using FluidSystems.Control.Services.FlowSolvers;
@@ -84,10 +83,6 @@ namespace FluidSystems.Control.Services.Flow
                 if (edge.Id == altEdgeId) return threeWay.IsAlternativePosition;
 
                 return false;
-            }
-            if (behavior is ChamberBehavior chamber)
-            {
-                return !chamber.IsFilling;
             }
 
             return true;
