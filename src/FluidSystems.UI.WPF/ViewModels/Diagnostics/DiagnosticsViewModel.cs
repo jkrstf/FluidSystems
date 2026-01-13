@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using FluidSystems.Control.Core;
-using FluidSystems.Core.Models.System;
 using FluidSystems.UI.WPF.Resources;
 using System.Collections.ObjectModel;
 
@@ -8,13 +7,21 @@ namespace FluidSystems.UI.WPF.ViewModels.Diagnostics
 {
     public partial class DiagnosticsViewModel : ObservableObject
     {
+        private readonly SimulationContext _context;
+
         [ObservableProperty] private ObservableCollection<ParametersViewModel> _parametersList = new();
 
-        public void LoadComponentData(string componentId, FluidSystem system, SimulationContext context)
+        public DiagnosticsViewModel(SimulationContext context)
+        {
+            _context = context;
+            _context.ComponentBehaviorChanged += ComponentBehaviorChanged;
+        }
+
+        public void OnComponentSelected(string componentId)
         {
             ParametersList.Clear();
 
-            var component = system.Components.FirstOrDefault(c => c.Id == componentId);
+            var component = _context.System.Components.FirstOrDefault(c => c.Id == componentId);
             if (component == null) return;
 
             var summary = new ParametersViewModel();
@@ -33,7 +40,7 @@ namespace FluidSystems.UI.WPF.ViewModels.Diagnostics
                 ParametersList.Add(parametersVm);
             }
 
-            var behaviorState = context.GetBehavior(componentId)?.GetState();
+            var behaviorState = _context.GetBehavior(componentId)?.GetState();
             if (behaviorState != null && behaviorState.Count > 0)
             {
                 var behaviorVm = new ParametersViewModel();
@@ -41,7 +48,7 @@ namespace FluidSystems.UI.WPF.ViewModels.Diagnostics
                 ParametersList.Add(behaviorVm);
             }
 
-            var materialValue = context.FluidState.Materials.FirstOrDefault(p => p.Key == componentId).Value;
+            var materialValue = _context.FluidState.Materials.FirstOrDefault(p => p.Key == componentId).Value;
             if (materialValue != null)
             {
                 var materialVm = new ParametersViewModel();
@@ -54,6 +61,11 @@ namespace FluidSystems.UI.WPF.ViewModels.Diagnostics
 
                 ParametersList.Add(materialVm);
             }
+        }
+
+        private void ComponentBehaviorChanged(object? sender, string componentId)
+        {
+            OnComponentSelected(componentId);
         }
     }
 }

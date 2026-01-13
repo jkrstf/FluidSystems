@@ -14,5 +14,10 @@ namespace FluidSystems.UI.WPF.ViewModels.ControlPanels
             EmptyChamberViewModel = emptyChamber;
             ManualControlViewModel = manualControl;
         }
+
+        public void OnComponentSelected(string selectedComopnentId)
+        {
+            ManualControlViewModel.Update(selectedComopnentId);
+        }
     }
 }

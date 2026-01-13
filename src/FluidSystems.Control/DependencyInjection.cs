@@ -11,6 +11,7 @@ namespace FluidSystems.Control
         {
             services.AddSingleton<IFlowSolver, FlowSolver>();
             services.AddSingleton<ISimulationManager, SimulationManager>();
+            services.AddSingleton<SimulationContext>();
             return services;
         }
     }

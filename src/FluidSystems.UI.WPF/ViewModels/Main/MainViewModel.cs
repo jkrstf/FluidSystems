@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluidSystems.Control.Core;
 using FluidSystems.Core.Services.Interfaces;
 using FluidSystems.UI.WPF.Resources;
 using FluidSystems.UI.WPF.Services;
@@ -14,6 +15,7 @@ namespace FluidSystems.UI.WPF.ViewModels.Main
         private readonly IDialogService _dialogService;
         private readonly IFluidSystemLoader _systemLoader;
         private readonly IFluidSystemLayoutLoader _systemLayoutLoader;
+        private readonly SimulationContext _context;
 
         [ObservableProperty] private HomeViewModel _homeViewModel;
         [ObservableProperty] private string _title;
@@ -25,12 +27,13 @@ namespace FluidSystems.UI.WPF.ViewModels.Main
 
 
 
-        public MainViewModel(HomeViewModel homeViewModel, IDialogService dialogService, IFluidSystemLoader systemLoader, IFluidSystemLayoutLoader systemLayoutLoader)
+        public MainViewModel(HomeViewModel homeViewModel, IDialogService dialogService, IFluidSystemLoader systemLoader, IFluidSystemLayoutLoader systemLayoutLoader, SimulationContext context)
         {
             _homeViewModel = homeViewModel;
             _dialogService = dialogService;
             _systemLoader = systemLoader;
             _systemLayoutLoader = systemLayoutLoader;
+            _context = context;
             
             Title = GetAppTitleWithVersion();
         }
@@ -77,7 +80,7 @@ namespace FluidSystems.UI.WPF.ViewModels.Main
                 SystemDescription = system.Description;
                 LayoutVersion = layoutResult.Value.Metadata.Version;
 
-                HomeViewModel.Update(system, layout);
+                _context.Initialize(system, layout);
                 return true;
             }
             catch (Exception ex)

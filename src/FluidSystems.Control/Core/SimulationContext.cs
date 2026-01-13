@@ -1,5 +1,6 @@
 ﻿using FluidSystems.Control.Behaviors;
 using FluidSystems.Control.Models;
+using FluidSystems.Core.Models.Layout;
 using FluidSystems.Core.Models.System;
 using FluidSystems.Core.Models.Topology;
 
@@ -7,18 +8,27 @@ namespace FluidSystems.Control.Core
 {
     public class SimulationContext
     {
+        private readonly ISimulationManager _manager;
         private readonly Dictionary<string, IComponentBehavior> _behaviors = new();
 
-        public TopologyGraph Graph { get; }
-        public FluidSystem System { get; }
-        public FluidState FluidState { get; }
+        public TopologyGraph Graph { get; private set; }
+        public FluidSystem System { get; private set; }
+        public FluidSystemLayout Layout { get; private set; }
+        public FluidState FluidState { get; private set; }
 
+        public event EventHandler Initialized;
         public event EventHandler<string>? ComponentStateChanged;
         public event EventHandler<string>? ComponentBehaviorChanged;
 
-        public SimulationContext(FluidSystem system)
+        public SimulationContext(ISimulationManager manager)
+        {
+            _manager = manager;
+        }
+
+        public void Initialize(FluidSystem system, FluidSystemLayout layout)
         {
             System = system ?? throw new ArgumentNullException(nameof(system));
+            Layout = layout ?? throw new ArgumentNullException(nameof(layout));
 
             var builder = new FluidTopologyGraphBuilder();
             Graph = builder.Build(system);
@@ -26,6 +36,9 @@ namespace FluidSystems.Control.Core
             FluidState = new FluidState();
 
             InitializeBehaviors();
+            _manager.SetContext(this);
+
+            Initialized?.Invoke(this, null);
         }
 
         private void InitializeBehaviors()

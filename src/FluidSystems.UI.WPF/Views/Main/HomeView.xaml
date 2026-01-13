@@ -18,7 +18,7 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate DataType="{x:Type vmDiagrm:DiagramViewModel}">
-            <diagrams:DiagramView Width="{Binding DataContext.DiagramWidth, RelativeSource={RelativeSource AncestorType=UserControl}}" Height="{Binding DataContext.DiagramHeight, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+            <diagrams:DiagramView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type vmDiag:DiagnosticsViewModel}">
             <diagnostics:DiagnosticsView />

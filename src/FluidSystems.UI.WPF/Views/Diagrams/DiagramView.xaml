@@ -8,7 +8,11 @@
     d:MaxHeight="600"
     d:Width="800"
     mc:Ignorable="d">
-    <Border BorderBrush="Gray" BorderThickness="1">
+    <Border
+        Width="{Binding DiagramWidth}"
+        Height="{Binding DiagramHeight}"
+        BorderBrush="Gray"
+        BorderThickness="1">
         <Canvas>
             <ItemsControl ItemsSource="{Binding Connections}">
                 <ItemsControl.ItemsPanel>

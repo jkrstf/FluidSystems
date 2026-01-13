@@ -1,29 +1,57 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluidSystems.Control.Core;
+using FluidSystems.Core.Models.Enums;
+using FluidSystems.UI.WPF.Models;
 using System.Collections.ObjectModel;
 
 namespace FluidSystems.UI.WPF.ViewModels.ControlPanels
 {
     public partial class EmptyingChamberViewModel : ObservableObject
     {
+        private SimulationContext _context;
+
         [NotifyCanExecuteChangedFor(nameof(EmptyChamberCommand))]
         [ObservableProperty]
-        private string? _selectedChamber;
+        private ComponentItem? _selectedChamber;
         [NotifyCanExecuteChangedFor(nameof(EmptyChamberCommand))]
         [ObservableProperty]
-        private string? _selectedSink;
+        private ComponentItem? _selectedSink;
         [ObservableProperty] private string? _statusMessage;
         [ObservableProperty] private bool _isBusy;
 
-        public ObservableCollection<string> Chambers { get; } = new();
-        public ObservableCollection<string> Sinks { get; } = new();
+        public ObservableCollection<ComponentItem> Chambers { get; } = new();
+        public ObservableCollection<ComponentItem> Sinks { get; } = new();
 
-        private bool CanEmpty => !string.IsNullOrEmpty(SelectedChamber) && !string.IsNullOrEmpty(SelectedSink) && !IsBusy;
+        private bool CanEmpty => SelectedChamber != null && SelectedSink != null && !IsBusy;
 
-        public void Initialize(List<string> chambers, List<string> sinks)
+        public EmptyingChamberViewModel(SimulationContext context)
         {
-            foreach (var chamber in chambers) Sinks.Add(chamber);
-            foreach (var sink in sinks) Chambers.Add(sink);
+            _context = context;
+            _context.Initialized += OnSimulationContextInitialized;
+        }
+
+        public void OnSimulationContextInitialized(object? sender, EventArgs e)
+        {
+            Sinks.Clear();
+            Chambers.Clear();
+
+            if (_context?.System?.Components == null) return;
+
+            var sinks = _context.System.Components
+                .Where(c => c.Category == ComponentCategory.Sink)
+                .Select(c => new ComponentItem(c.Id, c.Name));
+
+            foreach (var item in sinks) Sinks.Add(item);
+
+            var chambers = _context.System.Components
+                .Where(c => c.Category == ComponentCategory.Container && c.SubType == "Chamber")
+                .Select(c => new ComponentItem(c.Id, c.Name));
+
+            foreach (var item in chambers) Chambers.Add(item);
+
+            if (Sinks.Count > 0) SelectedSink = Sinks.First();
+            if (Chambers.Count > 0) SelectedChamber = Chambers.First();
         }
 
         [RelayCommand(CanExecute = nameof(CanEmpty))]

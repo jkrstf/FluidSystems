@@ -23,6 +23,7 @@
             Grid.Row="0"
             Grid.Column="1"
             Margin="4"
+            DisplayMemberPath="Name"
             ItemsSource="{Binding Chambers}"
             SelectedItem="{Binding SelectedChamber}" />
         <TextBlock
@@ -33,7 +34,8 @@
             Grid.Row="1"
             Grid.Column="1"
             Margin="4"
-            ItemsSource="{Binding Sink}"
+            DisplayMemberPath="Name"
+            ItemsSource="{Binding Sinks}"
             SelectedItem="{Binding SelectedSink}" />
         <Button
             Grid.Row="2"
