@@ -66,7 +66,7 @@ namespace FluidSystems.Control.Services.Flow
             }
         }
 
-        bool CanEnterNode(string nodeId, string material, SimulationContext context)
+        private bool CanEnterNode(string nodeId, string material, SimulationContext context)
         {
             var behavior = context.GetBehavior(nodeId);
             if (behavior is TwoWayValveBehavior twoWay && !twoWay.IsOpen) return material == "Air";

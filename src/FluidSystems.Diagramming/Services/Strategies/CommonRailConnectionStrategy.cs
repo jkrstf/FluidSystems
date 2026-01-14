@@ -2,7 +2,6 @@
 using FluidSystems.Core.Services.Interfaces;
 using FluidSystems.Diagramming.Models;
 using FluidSystems.Diagramming.Models.Enums;
-using System.ComponentModel;
 
 namespace FluidSystems.Diagramming.Services.Strategies
 {
