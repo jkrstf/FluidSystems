@@ -50,8 +50,6 @@
             </StatusBarItem>
         </StatusBar>
 
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <ContentControl Content="{Binding HomeViewModel}" />
-        </ScrollViewer>
+        <ContentControl Content="{Binding HomeViewModel}" />
     </DockPanel>
 </Window>

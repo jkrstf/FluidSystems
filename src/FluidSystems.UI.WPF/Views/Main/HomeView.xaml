@@ -31,27 +31,37 @@
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="2*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <GroupBox Header="{x:Static resources:Texts.PipingAndInstrumentationDiagram}">
-            <ContentControl Content="{Binding DiagramContent}" />
-        </GroupBox>
-        <GroupBox Grid.Column="1" Header="{x:Static resources:Texts.Details}">
-            <ContentControl Content="{Binding DiagnosticsViewModel}" />
-        </GroupBox>
-        <GroupBox Grid.Row="1" Header="{x:Static resources:Texts.ControlPanel}">
-            <ContentControl Content="{Binding ControlPanelViewModel}" />
-        </GroupBox>
-        <GroupBox
-            Grid.Row="1"
-            Grid.Column="1"
-            Header="{x:Static resources:Texts.Logs}">
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Column="0" Header="{x:Static resources:Texts.PipingAndInstrumentationDiagram}">
+                <ContentControl Content="{Binding DiagramContent}" />
+            </GroupBox>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <GroupBox Grid.Row="0" Header="{x:Static resources:Texts.Details}">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                        <ContentControl Content="{Binding DiagnosticsViewModel}" />
+                    </ScrollViewer>
+                </GroupBox>
+                <GroupBox Grid.Row="1" Header="{x:Static resources:Texts.ControlPanel}">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                        <ContentControl VerticalAlignment="Top" Content="{Binding ControlPanelViewModel}" />
+                    </ScrollViewer>
+                </GroupBox>
+            </Grid>
+        </Grid>
+        <GroupBox Grid.Row="1" Header="{x:Static resources:Texts.Logs}">
             <ContentControl Content="{Binding LogsViewModel}" />
         </GroupBox>
     </Grid>
