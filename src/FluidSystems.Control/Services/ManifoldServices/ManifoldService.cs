@@ -153,7 +153,7 @@ namespace FluidSystems.Control.Services.ManifoldServices
             foreach (var pipeId in manifoldPipesToCheck)
             {
                 string pipeMaterial = _context.FluidState.Materials[pipeId];
-                if (pipeMaterial != FluidSystemContants.Air && pipeMaterial != chamberMaterial) return true;
+                if (pipeMaterial != FluidSystemContants.Air && chamberMaterial != FluidSystemContants.Air && pipeMaterial != chamberMaterial) return true;
             }
             return false;
         }

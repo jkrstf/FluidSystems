@@ -24,6 +24,7 @@ namespace FluidSystems.UI.WPF.ViewModels.Diagrams
             _context = context;
             _context.Initialized += OnSimulationContextInitialized;
             _context.ComponentStateChanged += Context_ComponentStateChanged;
+            _context.ComponentBehaviorChanged += OnBehaviorChanged;
             _diagramBuilder = diagramBuilder;
         }
 
@@ -31,7 +32,6 @@ namespace FluidSystems.UI.WPF.ViewModels.Diagrams
         {
             SystemDiagram diagram = _diagramBuilder.BuildDiagram(_context.System, _context.Layout, DiagramWidth, DiagramHeight);
             UpdateDiagram(diagram);
-
         }
 
         private void Context_ComponentStateChanged(object? sender, string id)
@@ -44,12 +44,16 @@ namespace FluidSystems.UI.WPF.ViewModels.Diagrams
                 foreach (var connection in _connections)
                     if (connection.ComponentId == id) connection.UpdateMaterial(material);
             }
+            OnBehaviorChanged(sender, id);
+        }
 
+        private void OnBehaviorChanged(object? sender, string id)
+        {
             var targetNode = Nodes.FirstOrDefault(n => n.ComponentId == id);
             if (targetNode != null)
             {
                 var state = _context.GetBehavior(id)?.GetState();
-                targetNode.Parameters = state != null ? string.Join(", ", state.Values) : string.Empty;
+                targetNode.UpdateParameters(state != null ? string.Join(", ", state.Values) : string.Empty);
             }
         }
 
