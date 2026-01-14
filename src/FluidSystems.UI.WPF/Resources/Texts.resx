@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BehaviorChangedText" xml:space="preserve">
+    <value>Behavior changed for {0}. {1}</value>
+  </data>
   <data name="BehaviorParameters" xml:space="preserve">
     <value>Behavior Parameters</value>
   </data>

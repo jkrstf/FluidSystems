@@ -61,6 +61,15 @@ namespace FluidSystems.UI.WPF.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Behavior changed for {0}. {1}.
+        /// </summary>
+        public static string BehaviorChangedText {
+            get {
+                return ResourceManager.GetString("BehaviorChangedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Behavior Parameters.
         /// </summary>
         public static string BehaviorParameters {

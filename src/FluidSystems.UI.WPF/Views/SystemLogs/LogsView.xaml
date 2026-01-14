@@ -5,8 +5,29 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:FluidSystems.UI.WPF.Views.SystemLogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid />
+    <ListView
+        Grid.Row="1"
+        ItemsSource="{Binding Logs}"
+        ScrollViewer.VerticalScrollBarVisibility="Auto">
+        <ListView.View>
+            <GridView>
+                <GridViewColumn Header="Time">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Foreground="Black" Text="{Binding Timestamp, StringFormat='yyyy-MM-dd HH:mm:ss'}" />
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+
+                <GridViewColumn Width="Auto" Header="Message">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Foreground="Black" Text="{Binding Message}" />
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+            </GridView>
+        </ListView.View>
+    </ListView>
 </UserControl>
