@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using FluidSystems.Core.Constants;
 using FluidSystems.Diagramming.Models;
 using System.Windows;
 using System.Windows.Media;
@@ -39,9 +40,9 @@ namespace FluidSystems.UI.WPF.ViewModels.Diagrams
         {
             Color = material switch
             {
-                "Water" => Brushes.Blue,
-                "Alcohol" => Brushes.Green,
-                "Air" => Brushes.Orange,
+                FluidSystemContants.Water => Brushes.Blue,
+                FluidSystemContants.Alcohol => Brushes.Green,
+                FluidSystemContants.Air => Brushes.Orange,
                 _ => Brushes.Black
             };
         }
