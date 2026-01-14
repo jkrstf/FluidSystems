@@ -58,6 +58,11 @@ namespace FluidSystems.UI.WPF.ViewModels.Diagrams
             foreach (var component in _context.System.Components) Context_ComponentStateChanged(this, component.Id);
         }
 
-        private void OnComponentSelected(object? sender, string componentId) => ComponentSelected?.Invoke(this, componentId);
+        private void OnComponentSelected(object? sender, string componentId)
+        {
+            foreach (var node in Nodes.Where(node => node.IsSelected)) node.IsSelected = false;
+            Nodes.First(node => node.ComponentId == componentId).IsSelected = true;
+            ComponentSelected?.Invoke(this, componentId);
+        }
     }
 }

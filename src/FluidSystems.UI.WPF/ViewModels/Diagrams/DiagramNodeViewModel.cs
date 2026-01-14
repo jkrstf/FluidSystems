@@ -9,6 +9,7 @@ namespace FluidSystems.UI.WPF.ViewModels.Diagrams
     {
         public string ComponentId { get; private set; }
 
+        [ObservableProperty] private bool _isSelected;
         [ObservableProperty] private Brush _color;
         [ObservableProperty] private double _x;
         [ObservableProperty] private double _y;
@@ -47,6 +48,7 @@ namespace FluidSystems.UI.WPF.ViewModels.Diagrams
             };
         }
 
-        [RelayCommand] private void ToggleComponent(string? id) => ComponentSelected?.Invoke(this, id);
+        [RelayCommand]
+        private void ToggleComponent(string? id) => ComponentSelected?.Invoke(this, id);
     }
 }
