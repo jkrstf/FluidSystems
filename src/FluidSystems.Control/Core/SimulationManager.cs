@@ -12,8 +12,6 @@ namespace FluidSystems.Control.Core
             _solver = solver;
         }
 
-        public SimulationContext? CurrentContext => throw new NotImplementedException();
-
         public void SetContext(SimulationContext context)
         {
             if (_context != null) _context.ComponentBehaviorChanged -= context_ComponentBehaviorChanged;
