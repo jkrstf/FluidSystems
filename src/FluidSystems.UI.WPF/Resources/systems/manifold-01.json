@@ -1,6 +1,6 @@
 {
 	"metadata": {
-		"version": "1.1",
+		"version": "1.2",
 		"lastModified": "2026-01-14"
 	},
 	"content": {
@@ -104,7 +104,7 @@
 				"id": "manifold_main",
 				"name": "Manifold",
 				"category": "Manifold",
-				"subType": "",
+				"subType": "Distribution",
 				"parameters": {},
 				"parentId": null,
 				"connectors": []
@@ -199,8 +199,8 @@
 				"category": "Valve",
 				"subType": "ThreeWay",
 				"parameters": {
-					"DefaultEdge": "pipe_13",
-					"AlternativeEdge": "pipe_14"
+					"DefaultEdge": "pipe_14",
+					"AlternativeEdge": "pipe_13"
 				},
 				"parentId": "manifold_main",
 				"connectors": [
@@ -297,7 +297,7 @@
 				"parentId": null,
 				"connectors": [
 					{ "connectedComponentId": "valve_w1" },
-					{ "connectedComponentId": "sink_hw" }
+					{ "connectedComponentId": "sink_nhw" }
 				]
 			},
 			{
@@ -308,7 +308,7 @@
 				"parentId": null,
 				"connectors": [
 					{ "connectedComponentId": "valve_w1" },
-					{ "connectedComponentId": "sink_nhw" }
+					{ "connectedComponentId": "sink_hw" }
 				]
 			},
 			{
