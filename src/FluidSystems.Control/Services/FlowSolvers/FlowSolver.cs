@@ -15,6 +15,7 @@ namespace FluidSystems.Control.Services.Flow
 
             foreach (var component in context.System.Components)
             {
+                if (component.Category == ComponentCategory.Manifold) continue;
                 if (component.Category != ComponentCategory.Source)
                 {
                     context.SetMaterial(component.Id, "Air");
