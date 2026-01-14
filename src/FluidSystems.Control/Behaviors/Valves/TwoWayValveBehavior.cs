@@ -26,5 +26,6 @@ namespace FluidSystems.Control.Behaviors.Valves
         }
 
         public string GetDescription() => Messages.TwoWayValuveDescriptor;
+        public bool IsPathActive(string fromId, string toId, FluidComponent component, bool simulateToggle = false) => simulateToggle ? !_isOpen : _isOpen;
     }
 }

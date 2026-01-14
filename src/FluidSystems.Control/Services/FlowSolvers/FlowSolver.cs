@@ -1,6 +1,7 @@
 ﻿using FluidSystems.Control.Behaviors.Valves;
 using FluidSystems.Control.Core;
 using FluidSystems.Control.Services.FlowSolvers;
+using FluidSystems.Core.Constants;
 using FluidSystems.Core.Models.Enums;
 using FluidSystems.Core.Models.Topology;
 
@@ -18,11 +19,11 @@ namespace FluidSystems.Control.Services.Flow
                 if (component.Category == ComponentCategory.Manifold) continue;
                 if (component.Category != ComponentCategory.Source)
                 {
-                    context.SetMaterial(component.Id, "Air");
+                    context.SetMaterial(component.Id, FluidSystemContants.Air);
                 }
                 else
                 {
-                    context.SetMaterial(component.Id, component.Parameters["Material"]);
+                    context.SetMaterial(component.Id, component.Parameters[FluidSystemContants.Material]);
                 }
             }
             UpdateFlows(context);
@@ -37,7 +38,7 @@ namespace FluidSystems.Control.Services.Flow
 
             foreach (var source in sources)
             {
-                source.Parameters.TryGetValue("Material", out string? material);
+                source.Parameters.TryGetValue(FluidSystemContants.Material, out string? material);
                 if (material != null) queue.Enqueue((source.Id, material, null));
             }
 
@@ -69,7 +70,7 @@ namespace FluidSystems.Control.Services.Flow
         private bool CanEnterNode(string nodeId, string material, SimulationContext context)
         {
             var behavior = context.GetBehavior(nodeId);
-            if (behavior is TwoWayValveBehavior twoWay && !twoWay.IsOpen) return material == "Air";
+            if (behavior is TwoWayValveBehavior twoWay && !twoWay.IsOpen) return material == FluidSystemContants.Air;
             return true;
         }
 
@@ -80,41 +81,8 @@ namespace FluidSystems.Control.Services.Flow
             var behavior = context.GetBehavior(nodeId);
             if (behavior == null) return true;
 
-            if (behavior is TwoWayValveBehavior twoWay)
-            {
-                return twoWay.IsOpen;
-            }
-
-            if (behavior is ThreeWayValveBehavior threeWay)
-            {
-                var component = context.System.Components.First(c => c.Id == nodeId);
-
-                var commonEdgeId = component.Connectors.FirstOrDefault().ConnectedComponent.Id;
-                component.Parameters.TryGetValue("DefaultEdge", out var defaultEdgeId);
-                component.Parameters.TryGetValue("AlternativeEdge", out var altEdgeId);
-
-
-                string toEdgeId = toEdge.Id;
-
-                if (threeWay.IsDefaultPosition)
-                {
-                    bool isPathCommonToDefault = (fromEdgeId == commonEdgeId && toEdgeId == defaultEdgeId);
-                    bool isPathDefaultToCommon = (fromEdgeId == defaultEdgeId && toEdgeId == commonEdgeId);
-
-                    return isPathCommonToDefault || isPathDefaultToCommon;
-                }
-                else if (threeWay.IsAlternativePosition)
-                {
-                    bool isPathCommonToAlt = (fromEdgeId == commonEdgeId && toEdgeId == altEdgeId);
-                    bool isPathAltToCommon = (fromEdgeId == altEdgeId && toEdgeId == commonEdgeId);
-
-                    return isPathCommonToAlt || isPathAltToCommon;
-                }
-
-                return false;
-            }
-
-            return true;
+            var component = context.System.Components.First(c => c.Id == nodeId);
+            return behavior.IsPathActive(fromEdgeId, toEdge.Id, component);
         }
     }
 }

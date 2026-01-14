@@ -1,6 +1,6 @@
-﻿using FluidSystems.Control.Behaviors.Valves;
-using FluidSystems.Control.Core;
+﻿using FluidSystems.Control.Core;
 using FluidSystems.Control.Resources;
+using FluidSystems.Core.Constants;
 using FluidSystems.Core.Models.Enums;
 using FluidSystems.Core.Models.Topology;
 using FluidSystems.Shared.Common.Results;
@@ -59,13 +59,13 @@ namespace FluidSystems.Control.Services.FluidSafetyValidators
                 foreach (var edge in connectedEdges)
                 {
                     if (edge.Id == fromEdgeId) continue;
-                    if (!CanFlowThroughPotential(currentNodeId, fromEdgeId, edge, toggleComponentId, context)) continue;
+                    if (!CanFlowThrough(currentNodeId, fromEdgeId, edge, toggleComponentId, context)) continue;
 
                     var edgeMaterial = context.FluidState.Materials[edge.Id];
 
-                    if (edgeMaterial != startMaterial && startMaterial == "Air")
+                    if (edgeMaterial != startMaterial && startMaterial == FluidSystemContants.Air)
                     {
-                        bool airInvolved = edgeMaterial == "Air" || startMaterial == "Air";
+                        bool airInvolved = edgeMaterial == FluidSystemContants.Air || startMaterial == FluidSystemContants.Air;
                         if (!airInvolved)
                         {
                             message = string.Format(Messages.MixingFluidsText, toggleComponentId);
@@ -86,49 +86,21 @@ namespace FluidSystems.Control.Services.FluidSafetyValidators
             return false;
         }
 
-        private bool CanFlowThroughPotential(string nodeId, string? fromEdgeId, TopologyEdge toEdge, string toggleComponentId, SimulationContext context)
+        private bool CanFlowThrough(string nodeId, string? fromEdgeId, TopologyEdge toEdge, string toggleComponentId, SimulationContext context)
         {
             if (fromEdgeId == null) return true;
 
             var behavior = context.GetBehavior(nodeId);
             if (behavior == null) return true;
 
-            bool isToggled = nodeId == toggleComponentId;
-
-            if (behavior is TwoWayValveBehavior twoWay)
-            {
-                return isToggled ? true : twoWay.IsOpen;
-            }
-            if (behavior is ThreeWayValveBehavior threeWay)
-            {
-                var component = context.System.Components.First(c => c.Id == nodeId);
-
-                var commonEdgeId = component.Connectors.First().ConnectedComponent.Id;
-                component.Parameters.TryGetValue("DefaultEdge", out var defaultEdgeId);
-                component.Parameters.TryGetValue("AlternativeEdge", out var altEdgeId);
-
-                string toEdgeId = toEdge.Id;
-
-                bool defaultPos = isToggled ? false : threeWay.IsDefaultPosition;
-                bool altPos = isToggled ? true : threeWay.IsAlternativePosition;
-
-                if (defaultPos)
-                    return (fromEdgeId == commonEdgeId && toEdgeId == defaultEdgeId) ||
-                           (fromEdgeId == defaultEdgeId && toEdgeId == commonEdgeId);
-
-                if (altPos)
-                    return (fromEdgeId == commonEdgeId && toEdgeId == altEdgeId) ||
-                           (fromEdgeId == altEdgeId && toEdgeId == commonEdgeId);
-
-                return false;
-            }
-
-            return true;
+            var component = context.System.Components.First(c => c.Id == nodeId);
+            bool isTargetComponent = (nodeId == toggleComponentId);
+            return behavior.IsPathActive(fromEdgeId, toEdge.Id, component, simulateToggle: isTargetComponent);
         }
 
         private bool AirSourceHasSinkPath(string toggleComponentId, SimulationContext context)
         {
-            var airSources = context.System.Components.Where(component => component.Category == ComponentCategory.Source && context.FluidState.Materials[component.Id] == "Air");
+            var airSources = context.System.Components.Where(component => component.Category == ComponentCategory.Source && context.FluidState.Materials[component.Id] == FluidSystemContants.Air);
 
             foreach (var source in airSources)
                 if (CanReachSinkFromSource(source.Id, toggleComponentId, context)) return true;
@@ -155,7 +127,7 @@ namespace FluidSystems.Control.Services.FluidSafetyValidators
                 foreach (var edge in edges)
                 {
                     if (edge.Id == fromEdgeId) continue;
-                    if (!CanFlowThroughPotential(currentNodeId, fromEdgeId, edge, toggleComponentId, context)) continue;
+                    if (!CanFlowThrough(currentNodeId, fromEdgeId, edge, toggleComponentId, context)) continue;
                     foreach (var nextNodeId in edge.ConnectedNodeIds.Where(id => id != currentNodeId)) queue.Enqueue((nextNodeId, edge.Id));
                 }
             }
