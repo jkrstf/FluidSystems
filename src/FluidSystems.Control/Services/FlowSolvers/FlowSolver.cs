@@ -1,4 +1,4 @@
-using FluidSystems.Control.Behaviors.Valves;
+﻿using FluidSystems.Control.Behaviors.Valves;
 using FluidSystems.Control.Core;
 using FluidSystems.Control.Services.FlowSolvers;
 using FluidSystems.Core.Models.Enums;
@@ -8,9 +8,27 @@ namespace FluidSystems.Control.Services.Flow
 {
     public class FlowSolver : IFlowSolver
     {
+        public void InitializeFlow(SimulationContext context)
+        {
+            context.FluidState.Materials.Clear();
+            if (context?.System?.Components == null) return;
+
+            foreach (var component in context.System.Components)
+            {
+                if (component.Category != ComponentCategory.Source)
+                {
+                    context.SetMaterial(component.Id, "Air");
+                }
+                else
+                {
+                    context.SetMaterial(component.Id, component.Parameters["Material"]);
+                }
+            }
+            UpdateFlows(context);
+        }
+
         public void UpdateFlows(SimulationContext context)
         {
-            InitializeInitialState(context);
             var sources = context.System.Components.Where(component => component.Category == ComponentCategory.Source);
 
             var queue = new Queue<(string nodeId, string material)>();
@@ -41,27 +59,10 @@ namespace FluidSystems.Control.Services.Flow
 
                         foreach (var nextNodeId in neighborNodes)
                         {
+                            if (material == "Air") context.SetMaterial(nextNodeId, material);
                             queue.Enqueue((nextNodeId, material));
                         }
                     }
-                    else if (context.GetBehavior(currentNodeId) is ChamberBehavior chamber && chamber.IsFilling)
-                    {
-                        context.SetMaterial(currentNodeId, material);
-                    }
-                }
-            }
-        }
-
-        private void InitializeInitialState(SimulationContext context)
-        {
-            context.FluidState.Materials.Clear();
-            if (context?.System?.Components == null) return;
-
-            foreach (var component in context.System.Components)
-            {
-                if (component.Category != ComponentCategory.Source)
-                {
-                    context.SetMaterial(component.Id, "Air");
                 }
             }
         }
@@ -79,10 +80,11 @@ namespace FluidSystems.Control.Services.Flow
                 component.Parameters.TryGetValue("DefaultEdge", out var defaultEdgeId);
                 component.Parameters.TryGetValue("AlternativeEdge", out var altEdgeId);
 
+                if ((string.IsNullOrEmpty(defaultEdgeId) && threeWay.IsDefaultPosition) || (string.IsNullOrEmpty(altEdgeId) && threeWay.IsAlternativePosition)) return false;
                 if (edge.Id == defaultEdgeId) return threeWay.IsDefaultPosition;
                 if (edge.Id == altEdgeId) return threeWay.IsAlternativePosition;
 
-                return false;
+                return true;
             }
 
             return true;
