@@ -1,0 +1,77 @@
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using FluidSystems.Control.Core;
+using FluidSystems.Core.Services.Interfaces;
+using FluidSystems.Diagramming.Models;
+using System.Collections.ObjectModel;
+
+namespace FluidSystems.UI.WPF.ViewModels.Diagrams
+{
+    public partial class DiagramViewModel : ObservableObject
+    {
+        private readonly IDiagramBuilder _diagramBuilder;
+        private readonly SimulationContext _context;
+
+        [ObservableProperty] private ObservableCollection<DiagramNodeViewModel> _nodes = new();
+        [ObservableProperty] private ObservableCollection<DiagramConnectionViewModel> _connections = new();
+
+        [ObservableProperty] private double _diagramWidth = 800;
+        [ObservableProperty] private double _diagramHeight = 600;
+
+        public EventHandler<string> ComponentSelected;
+
+        public DiagramViewModel(SimulationContext context, IDiagramBuilder diagramBuilder)
+        {
+            _context = context;
+            _context.Initialized += OnSimulationContextInitialized;
+            _context.ComponentStateChanged += Context_ComponentStateChanged;
+            _diagramBuilder = diagramBuilder;
+        }
+
+        private void OnSimulationContextInitialized(object? sender, EventArgs e)
+        {
+            SystemDiagram diagram = _diagramBuilder.BuildDiagram(_context.System, _context.Layout, DiagramWidth, DiagramHeight);
+            UpdateDiagram(diagram);
+
+        }
+
+        private void Context_ComponentStateChanged(object? sender, string id)
+        {
+            if (_context.FluidState.Materials.TryGetValue(id, out var material))
+            {
+                foreach (var node in _nodes)
+                    if (node.ComponentId == id) node.UpdateMaterial(material);
+
+                foreach (var connection in _connections)
+                    if (connection.ComponentId == id) connection.UpdateMaterial(material);
+            }
+
+            var targetNode = Nodes.FirstOrDefault(n => n.ComponentId == id);
+            if (targetNode != null)
+            {
+                var state = _context.GetBehavior(id)?.GetState();
+                targetNode.Parameters = state != null ? string.Join(", ", state.Values) : string.Empty;
+            }
+        }
+
+        private void UpdateDiagram(SystemDiagram diagram)
+        {
+            foreach (var node in Nodes) node.ComponentSelected -= OnComponentSelected;
+            Nodes.Clear();
+            Connections.Clear();
+            foreach (var nodeModel in diagram.Nodes)
+            {
+                var vm = new DiagramNodeViewModel(nodeModel);
+                vm.ComponentSelected += OnComponentSelected;
+                Nodes.Add(vm);
+            }
+            foreach (var connModel in diagram.Connections) Connections.Add(new DiagramConnectionViewModel(connModel));
+            foreach (var component in _context.System.Components) Context_ComponentStateChanged(this, component.Id);
+        }
+
+        private void OnComponentSelected(object? sender, string componentId)
+        {
+            foreach (var node in Nodes) node.IsSelected = node.ComponentId == componentId;
+            ComponentSelected?.Invoke(this, componentId);
+        }
+    }
+}

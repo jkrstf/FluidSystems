@@ -1,0 +1,101 @@
+﻿<UserControl
+    x:Class="FluidSystems.UI.WPF.Views.Diagrams.DiagramView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:FluidSystems.UI.WPF.Views.Diagrams"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:MaxHeight="600"
+    d:Width="800"
+    mc:Ignorable="d">
+    <Viewbox Stretch="Uniform">
+        <Border
+            Width="{Binding DiagramWidth}"
+            Height="{Binding DiagramHeight}"
+            BorderBrush="Gray"
+            BorderThickness="1">
+            <Canvas>
+                <ItemsControl ItemsSource="{Binding Connections}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Background="Transparent" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Polyline
+                                    Points="{Binding PathPoints}"
+                                    Stroke="{Binding Color}"
+                                    StrokeThickness="3" />
+                                <TextBlock Text="{Binding Label}">
+                                    <TextBlock.RenderTransform>
+                                        <TranslateTransform X="{Binding LabelX}" Y="{Binding LabelY}" />
+                                    </TextBlock.RenderTransform>
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <ItemsControl ItemsSource="{Binding Nodes}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Background="Transparent" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.Left" Value="{Binding X}" />
+                            <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                Width="{Binding Width}"
+                                Height="{Binding Height}"
+                                Background="Transparent"
+                                BorderBrush="{Binding Color}"
+                                CornerRadius="4"
+                                Opacity="1">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="BorderThickness" Value="2.5" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                <Setter Property="BorderThickness" Value="5" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <Border.InputBindings>
+                                    <MouseBinding
+                                        Command="{Binding ToggleComponentCommand}"
+                                        CommandParameter="{Binding ComponentId}"
+                                        MouseAction="LeftClick" />
+                                </Border.InputBindings>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock
+                                        HorizontalAlignment="Left"
+                                        FontWeight="Bold"
+                                        Text="{Binding Label}" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        HorizontalAlignment="Left"
+                                        FontSize="11"
+                                        FontWeight="Light"
+                                        Text="{Binding Parameters}"
+                                        TextWrapping="Wrap" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Canvas>
+        </Border>
+    </Viewbox>
+</UserControl>

@@ -1,0 +1,33 @@
+﻿<UserControl
+    x:Class="FluidSystems.UI.WPF.Views.SystemLogs.LogsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:FluidSystems.UI.WPF.Views.SystemLogs"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <ListView
+        Grid.Row="1"
+        ItemsSource="{Binding Logs}"
+        ScrollViewer.VerticalScrollBarVisibility="Auto">
+        <ListView.View>
+            <GridView>
+                <GridViewColumn Header="Time">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Foreground="Black" Text="{Binding Timestamp, StringFormat='yyyy-MM-dd HH:mm:ss'}" />
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+
+                <GridViewColumn Width="400" Header="Message">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Foreground="Black" Text="{Binding Message}" />
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+            </GridView>
+        </ListView.View>
+    </ListView>
+</UserControl>
