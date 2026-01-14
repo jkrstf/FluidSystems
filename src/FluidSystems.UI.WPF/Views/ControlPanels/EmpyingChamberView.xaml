@@ -12,11 +12,11 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" MinWidth="100" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" MinWidth="100" />
         </Grid.ColumnDefinitions>
         <TextBlock Margin="4" Text="Select chamber" />
         <ComboBox
@@ -40,15 +40,17 @@
         <Button
             Grid.Row="2"
             Grid.ColumnSpan="2"
+            Height="25"
             Margin="4"
             Command="{Binding EmptyChamberCommand}"
             Content="Empty chamber" />
         <TextBlock
-            Grid.Row="2"
-            Grid.Column="2"
-            Height="25"
+            Grid.Row="3"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
             Margin="4"
             Foreground="Red"
-            Text="{Binding StatusMessage}" />
+            Text="{Binding StatusMessage}"
+            TextWrapping="Wrap" />
     </Grid>
 </UserControl>

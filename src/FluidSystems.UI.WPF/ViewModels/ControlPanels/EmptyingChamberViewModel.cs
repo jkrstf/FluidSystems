@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluidSystems.Control.Core;
+using FluidSystems.Control.Services.ChamberHandling;
+using FluidSystems.Control.Services.ManifoldServices;
 using FluidSystems.Core.Models.Enums;
 using FluidSystems.UI.WPF.Models;
 using System.Collections.ObjectModel;
@@ -9,7 +11,8 @@ namespace FluidSystems.UI.WPF.ViewModels.ControlPanels
 {
     public partial class EmptyingChamberViewModel : ObservableObject
     {
-        private SimulationContext _context;
+        private readonly SimulationContext _context;
+        private readonly IChamberDrainer _chamberDrainer;
 
         [NotifyCanExecuteChangedFor(nameof(EmptyChamberCommand))]
         [ObservableProperty]
@@ -25,10 +28,11 @@ namespace FluidSystems.UI.WPF.ViewModels.ControlPanels
 
         private bool CanEmpty => SelectedChamber != null && SelectedSink != null && !IsBusy;
 
-        public EmptyingChamberViewModel(SimulationContext context)
+        public EmptyingChamberViewModel(SimulationContext context, IChamberDrainer chamberDrainer)
         {
             _context = context;
             _context.Initialized += OnSimulationContextInitialized;
+            _chamberDrainer = chamberDrainer;
         }
 
         public void OnSimulationContextInitialized(object? sender, EventArgs e)
@@ -58,6 +62,9 @@ namespace FluidSystems.UI.WPF.ViewModels.ControlPanels
         private async Task EmptyChamber()
         {
             IsBusy = true;
+
+            var fillResult = _chamberDrainer.DrainChamber(SelectedChamber.Id, SelectedSink.Id, _context);
+            StatusMessage = fillResult.ErrorMessage;
 
             IsBusy = false;
         }

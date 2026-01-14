@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluidSystems.Control.Core;
+using FluidSystems.Control.Services.ManifoldServices;
 using FluidSystems.Core.Models.Enums;
 using FluidSystems.UI.WPF.Models;
 using System.Collections.ObjectModel;
@@ -10,6 +11,7 @@ namespace FluidSystems.UI.WPF.ViewModels.ControlPanels
     public partial class FillChamberViewModel : ObservableObject
     {
         private readonly SimulationContext _context;
+        private readonly IChamberFiller _chamberFiller;
 
         [NotifyCanExecuteChangedFor(nameof(FillChamberCommand))]
         [ObservableProperty] 
@@ -25,10 +27,11 @@ namespace FluidSystems.UI.WPF.ViewModels.ControlPanels
 
         private bool CanFill => SelectedLiquid != null && SelectedChamber != null && !IsBusy;
 
-        public FillChamberViewModel(SimulationContext context)
+        public FillChamberViewModel(SimulationContext context, IChamberFiller chamberFiller)
         {
             _context = context;
             _context.Initialized += OnSimulationContextInitialized;
+            _chamberFiller = chamberFiller;
         }
 
         private void OnSimulationContextInitialized(object? sender, EventArgs e)
@@ -58,6 +61,9 @@ namespace FluidSystems.UI.WPF.ViewModels.ControlPanels
         private async Task FillChamber()
         {
             IsBusy = true;
+
+            var fillResult = _chamberFiller.FillChamber(SelectedLiquid.Id, SelectedChamber.Id, _context);
+            StatusMessage = fillResult.ErrorMessage;
 
             IsBusy = false;
         }

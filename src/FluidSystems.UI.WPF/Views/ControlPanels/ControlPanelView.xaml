@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:FluidSystems.UI.WPF.Views.ControlPanels"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vmCtrl="clr-namespace:FluidSystems.UI.WPF.ViewModels.ControlPanels"
+    d:Background="White"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -15,6 +16,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type vmCtrl:EmptyingChamberViewModel}">
             <local:EmpyingChamberViews />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmCtrl:ManifoldCleanerViewModel}">
+            <local:ManifoldCleanerUserControl />
         </DataTemplate>
         <DataTemplate DataType="{x:Type vmCtrl:ManualControlViewModel}">
             <local:ManualControlViews />
@@ -26,6 +30,9 @@
         </TabItem>
         <TabItem Header="Empty Chamber">
             <ContentControl Content="{Binding EmptyChamberViewModel}" />
+        </TabItem>
+        <TabItem Header="Manifold  Cleaner">
+            <ContentControl Content="{Binding ManifoldCleanerViewModel}" />
         </TabItem>
         <TabItem Header="Manual Control">
             <ContentControl Content="{Binding ManualControlViewModel}" />

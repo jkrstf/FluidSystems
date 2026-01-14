@@ -39,6 +39,7 @@ namespace FluidSystems.UI.WPF
                     services.AddTransient<ControlPanelViewModel>();
                     services.AddTransient<FillChamberViewModel>();
                     services.AddTransient<EmptyingChamberViewModel>();
+                    services.AddTransient<ManifoldCleanerViewModel>();
                     services.AddTransient<ManualControlViewModel>();
                     services.AddTransient<LogsViewModel>();
                 })
