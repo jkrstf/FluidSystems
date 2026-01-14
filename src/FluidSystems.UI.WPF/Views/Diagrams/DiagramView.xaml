@@ -75,12 +75,21 @@
                                         MouseAction="LeftClick" />
                                 </Border.InputBindings>
                                 <Grid>
-                                    <StackPanel>
-                                        <TextBlock
-                                            HorizontalAlignment="Left"
-                                            FontWeight="Bold"
-                                            Text="{Binding Label}" />
-                                    </StackPanel>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock
+                                        HorizontalAlignment="Left"
+                                        FontWeight="Bold"
+                                        Text="{Binding Label}" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        HorizontalAlignment="Left"
+                                        FontSize="11"
+                                        FontWeight="Light"
+                                        Text="{Binding Parameters}"
+                                        TextWrapping="Wrap" />
                                 </Grid>
                             </Border>
                         </DataTemplate>

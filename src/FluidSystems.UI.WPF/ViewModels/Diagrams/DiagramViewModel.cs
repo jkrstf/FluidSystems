@@ -36,32 +36,41 @@ namespace FluidSystems.UI.WPF.ViewModels.Diagrams
 
         private void Context_ComponentStateChanged(object? sender, string id)
         {
-            foreach (var node in _nodes.Where(node => node.ComponentId == id))
-                if (_context.FluidState.Materials.ContainsKey(id)) node.UpdateMaterial(_context.FluidState.Materials[id]);
-            foreach (var connection in _connections.Where(connection => connection.ComponentId == id))
-                if (_context.FluidState.Materials.ContainsKey(id)) connection.UpdateMaterial(_context.FluidState.Materials[id]);
+            if (_context.FluidState.Materials.TryGetValue(id, out var material))
+            {
+                foreach (var node in _nodes)
+                    if (node.ComponentId == id) node.UpdateMaterial(material);
+
+                foreach (var connection in _connections)
+                    if (connection.ComponentId == id) connection.UpdateMaterial(material);
+            }
+
+            var targetNode = Nodes.FirstOrDefault(n => n.ComponentId == id);
+            if (targetNode != null)
+            {
+                var state = _context.GetBehavior(id)?.GetState();
+                targetNode.Parameters = state != null ? string.Join(", ", state.Values) : string.Empty;
+            }
         }
 
         private void UpdateDiagram(SystemDiagram diagram)
         {
             foreach (var node in Nodes) node.ComponentSelected -= OnComponentSelected;
             Nodes.Clear();
+            Connections.Clear();
             foreach (var nodeModel in diagram.Nodes)
             {
                 var vm = new DiagramNodeViewModel(nodeModel);
                 vm.ComponentSelected += OnComponentSelected;
                 Nodes.Add(vm);
             }
-
-            Connections.Clear();
             foreach (var connModel in diagram.Connections) Connections.Add(new DiagramConnectionViewModel(connModel));
             foreach (var component in _context.System.Components) Context_ComponentStateChanged(this, component.Id);
         }
 
         private void OnComponentSelected(object? sender, string componentId)
         {
-            foreach (var node in Nodes.Where(node => node.IsSelected)) node.IsSelected = false;
-            Nodes.First(node => node.ComponentId == componentId).IsSelected = true;
+            foreach (var node in Nodes) node.IsSelected = node.ComponentId == componentId;
             ComponentSelected?.Invoke(this, componentId);
         }
     }

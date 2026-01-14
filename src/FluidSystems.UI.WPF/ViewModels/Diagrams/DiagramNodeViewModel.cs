@@ -16,6 +16,7 @@ namespace FluidSystems.UI.WPF.ViewModels.Diagrams
         [ObservableProperty] private double _width;
         [ObservableProperty] private double _height;
         [ObservableProperty] private string _label;
+        [ObservableProperty] private string _parameters;
         [ObservableProperty] private string _visualStyle;
 
         public EventHandler<string> ComponentSelected;
@@ -46,6 +47,11 @@ namespace FluidSystems.UI.WPF.ViewModels.Diagrams
                 "Air" => Brushes.Orange,
                 _ => Brushes.Black
             };
+        }
+
+        public void UpdateParameters(string parameters)
+        {
+            Parameters = parameters;
         }
 
         [RelayCommand]
