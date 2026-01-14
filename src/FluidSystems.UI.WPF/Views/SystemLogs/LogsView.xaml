@@ -20,7 +20,7 @@
                     </GridViewColumn.CellTemplate>
                 </GridViewColumn>
 
-                <GridViewColumn Width="Auto" Header="Message">
+                <GridViewColumn Width="400" Header="Message">
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Foreground="Black" Text="{Binding Message}" />

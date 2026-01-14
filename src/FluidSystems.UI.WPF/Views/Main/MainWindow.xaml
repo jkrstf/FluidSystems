@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:FluidSystems.UI.WPF.ViewModels.Main"
     Title="{Binding Title}"
-    Width="1200"
+    Width="1300"
     Height="900"
     d:Height="600"
     d:Width="800"
