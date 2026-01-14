@@ -2,14 +2,14 @@
 using CommunityToolkit.Mvvm.Input;
 using FluidSystems.Control.Behaviors;
 using FluidSystems.Control.Core;
-using FluidSystems.Control.Services.FluidSafetyValidators;
+using FluidSystems.Control.Services.ManifoldServices;
 
 namespace FluidSystems.UI.WPF.ViewModels.ControlPanels
 {
     public partial class ManualControlViewModel : ObservableObject
     {
         private readonly SimulationContext _context;
-        private readonly IFluidSafetyValidator _safetyValidator;
+        private readonly IManifoldService _manifoldService;
         private string _selectedComponentId;
 
         [ObservableProperty]
@@ -23,12 +23,11 @@ namespace FluidSystems.UI.WPF.ViewModels.ControlPanels
 
         private bool CanActivate => HasBehavior && !IsBusy;
 
-        public ManualControlViewModel(SimulationContext context, IFluidSafetyValidator safetyValidator)
+        public ManualControlViewModel(SimulationContext context, IManifoldService manifoldService)
         {
             _context = context;
-            _safetyValidator = safetyValidator;
+            _manifoldService = manifoldService;
         }
-
 
         public void Update(string selectedComopnentId)
         {
@@ -42,16 +41,21 @@ namespace FluidSystems.UI.WPF.ViewModels.ControlPanels
         private async Task Activate()
         {
             IsBusy = true;
+            StatusMessage = "";
 
-            var validatorResult = _safetyValidator.ValidateToggle(_selectedComponentId, _context);
-            if (!validatorResult.IsSuccess) StatusMessage = validatorResult.ErrorMessage;
-            else
+            try
             {
-                StatusMessage = "";
-                _context.ActivateComponent(_selectedComponentId);
+                var fillResult = await _manifoldService.ToggleComponentAsync(_selectedComponentId);
+                StatusMessage = fillResult.ErrorMessage;
             }
-
-            IsBusy = false;
+            catch (Exception ex)
+            {
+                StatusMessage = ex.Message;
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
     }
 }
