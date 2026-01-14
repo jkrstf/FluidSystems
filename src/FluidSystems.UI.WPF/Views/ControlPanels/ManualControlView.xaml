@@ -13,6 +13,9 @@
             Margin="4"
             Command="{Binding ActivateCommand}"
             Content="Activate selected component" />
-        <TextBlock Foreground="Red" Text="{Binding StatusMessage}" />
+        <TextBlock
+            VerticalAlignment="Center"
+            Foreground="Red"
+            Text="{Binding StatusMessage}" />
     </StackPanel>
 </UserControl>

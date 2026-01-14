@@ -1,12 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluidSystems.Control.Core;
+using FluidSystems.Control.Services.FluidSafetyValidators;
 
 namespace FluidSystems.UI.WPF.ViewModels.ControlPanels
 {
     public partial class ManualControlViewModel : ObservableObject
     {
         private readonly SimulationContext _context;
+        private readonly IFluidSafetyValidator _safetyValidator;
         private string _selectedComponentId;
 
         [ObservableProperty]
@@ -19,9 +21,10 @@ namespace FluidSystems.UI.WPF.ViewModels.ControlPanels
 
         private bool CanActivate => HasBehavior && !IsBusy;
 
-        public ManualControlViewModel(SimulationContext context)
+        public ManualControlViewModel(SimulationContext context, IFluidSafetyValidator safetyValidator)
         {
             _context = context;
+            _safetyValidator = safetyValidator;
         }
 
 
@@ -36,7 +39,13 @@ namespace FluidSystems.UI.WPF.ViewModels.ControlPanels
         {
             IsBusy = true;
 
-            _context.ActivateComponent(_selectedComponentId);
+            var validatorResult = _safetyValidator.ValidateToggle(_selectedComponentId, _context);
+            if (!validatorResult.IsSuccess) StatusMessage = validatorResult.ErrorMessage;
+            else
+            {
+                StatusMessage = "";
+                _context.ActivateComponent(_selectedComponentId);
+            }
 
             IsBusy = false;
         }
