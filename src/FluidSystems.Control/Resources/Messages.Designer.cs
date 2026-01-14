@@ -79,6 +79,15 @@ namespace FluidSystems.Control.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dangerous operation: Activationg {0} would cause air mixing with fluid. Sink is not reachable..
+        /// </summary>
+        internal static string SinkNotReachableText {
+            get {
+                return ResourceManager.GetString("SinkNotReachableText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Activating this component toggles the routing mechanism, redirecting the fluid flow between the default path and the alternative path..
         /// </summary>
         internal static string ThreeWayValveDescriptor {

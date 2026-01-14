@@ -20,7 +20,8 @@ namespace FluidSystems.Control.Services.FluidSafetyValidators
             foreach (var startSource in sources)
             {
                 string startMaterial = context.FluidState.Materials[startSource.Id];
-                if (CanReachAnotherSource(startSource.Id, toggleComponentId, startMaterial, context, out string message))
+
+                if (CanReachAnotherSourceDirected(startSource.Id, toggleComponentId, startMaterial, context, out string message))
                 {
                     return Result<bool>.Failure(message);
                 }
@@ -29,83 +30,137 @@ namespace FluidSystems.Control.Services.FluidSafetyValidators
             return Result<bool>.Success(true);
         }
 
-        private bool CanReachAnotherSource(string startNodeId, string toggleComponentId, string startMaterial, SimulationContext context, out string message)
+        private bool CanReachAnotherSourceDirected(string startNodeId, string toggleComponentId, string startMaterial, SimulationContext context, out string message)
         {
             message = "";
-            var queue = new Queue<string>();
-            var visited = new HashSet<string>();
 
-            queue.Enqueue(startNodeId);
-            visited.Add(startNodeId);
+            var queue = new Queue<(string nodeId, string? fromEdgeId)>();
+            var visited = new HashSet<(string nodeId, string? fromEdgeId)>();
+
+            queue.Enqueue((startNodeId, null));
 
             while (queue.Count > 0)
             {
-                var currentNodeId = queue.Dequeue();
+                var (currentNodeId, fromEdgeId) = queue.Dequeue();
+
+                if (visited.Contains((currentNodeId, fromEdgeId))) continue;
+
+                visited.Add((currentNodeId, fromEdgeId));
 
                 if (currentNodeId != startNodeId &&
-                    context.System.Components.Any(c => c.Id == currentNodeId && c.Category == ComponentCategory.Source))
+                    context.System.Components.Any(component => component.Id == currentNodeId && component.Category == ComponentCategory.Source))
                 {
                     message = string.Format(Messages.MixingSourcesText, toggleComponentId);
                     return true;
                 }
 
-
-
                 var connectedEdges = context.Graph.Edges.Where(e => e.ConnectedNodeIds.Contains(currentNodeId));
 
                 foreach (var edge in connectedEdges)
                 {
-                    string otherMaterial = context.FluidState.Materials[edge.Id];
-                    if (IsPathOpenInPotentialState(currentNodeId, edge, toggleComponentId, context))
+                    if (edge.Id == fromEdgeId) continue;
+                    if (!CanFlowThroughPotential(currentNodeId, fromEdgeId, edge, toggleComponentId, context)) continue;
+
+                    var edgeMaterial = context.FluidState.Materials[edge.Id];
+
+                    if (edgeMaterial != startMaterial && startMaterial == "Air")
                     {
-                        if (otherMaterial != startMaterial && (otherMaterial != "Air" && startMaterial != "Air"))
+                        bool airInvolved = edgeMaterial == "Air" || startMaterial == "Air";
+                        if (!airInvolved)
                         {
                             message = string.Format(Messages.MixingFluidsText, toggleComponentId);
                             return true;
                         }
-                        var neighbors = edge.ConnectedNodeIds.Where(id => id != currentNodeId);
-                        foreach (var nextNodeId in neighbors)
+                        else if(!AirSourceHasSinkPath(toggleComponentId, context))
                         {
-                            if (!visited.Contains(nextNodeId))
-                            {
-                                visited.Add(nextNodeId);
-                                queue.Enqueue(nextNodeId);
-                            }
+                            message = string.Format(Messages.SinkNotReachableText, toggleComponentId);
+                            return true;
                         }
                     }
+
+                    foreach (var nextNodeId in edge.ConnectedNodeIds.Where(id => id != currentNodeId))
+                        queue.Enqueue((nextNodeId, edge.Id));
                 }
             }
 
             return false;
         }
 
-        private bool IsPathOpenInPotentialState(string currentNodeId, TopologyEdge edge, string toggleComponentId, SimulationContext context)
+        private bool CanFlowThroughPotential(string nodeId, string? fromEdgeId, TopologyEdge toEdge, string toggleComponentId, SimulationContext context)
         {
-            var behavior = context.GetBehavior(currentNodeId);
-            bool isToggledComponent = (currentNodeId == toggleComponentId);
+            if (fromEdgeId == null) return true;
 
+            var behavior = context.GetBehavior(nodeId);
             if (behavior == null) return true;
+
+            bool isToggled = nodeId == toggleComponentId;
 
             if (behavior is TwoWayValveBehavior twoWay)
             {
-                return isToggledComponent ? true : twoWay.IsOpen;
+                return isToggled ? true : twoWay.IsOpen;
             }
             if (behavior is ThreeWayValveBehavior threeWay)
             {
-                var component = context.System.Components.First(c => c.Id == currentNodeId);
+                var component = context.System.Components.First(c => c.Id == nodeId);
+
+                var commonEdgeId = component.Connectors.First().ConnectedComponent.Id;
                 component.Parameters.TryGetValue("DefaultEdge", out var defaultEdgeId);
                 component.Parameters.TryGetValue("AlternativeEdge", out var altEdgeId);
 
-                bool checkDefault = isToggledComponent ? false : threeWay.IsDefaultPosition;
-                bool checkAlt = isToggledComponent ? true : threeWay.IsAlternativePosition;
+                string toEdgeId = toEdge.Id;
 
-                if (edge.Id == defaultEdgeId) return checkDefault;
-                if (edge.Id == altEdgeId) return checkAlt;
+                bool defaultPos = isToggled ? false : threeWay.IsDefaultPosition;
+                bool altPos = isToggled ? true : threeWay.IsAlternativePosition;
 
-                return true;
+                if (defaultPos)
+                    return (fromEdgeId == commonEdgeId && toEdgeId == defaultEdgeId) ||
+                           (fromEdgeId == defaultEdgeId && toEdgeId == commonEdgeId);
+
+                if (altPos)
+                    return (fromEdgeId == commonEdgeId && toEdgeId == altEdgeId) ||
+                           (fromEdgeId == altEdgeId && toEdgeId == commonEdgeId);
+
+                return false;
             }
 
             return true;
+        }
+
+        private bool AirSourceHasSinkPath(string toggleComponentId, SimulationContext context)
+        {
+            var airSources = context.System.Components.Where(component => component.Category == ComponentCategory.Source && context.FluidState.Materials[component.Id] == "Air");
+
+            foreach (var source in airSources)
+                if (CanReachSinkFromSource(source.Id, toggleComponentId, context)) return true;
+
+            return false;
+        }
+
+        private bool CanReachSinkFromSource(string sourceId, string toggleComponentId, SimulationContext context)
+        {
+            var queue = new Queue<(string nodeId, string? fromEdgeId)>();
+            var visited = new HashSet<(string nodeId, string? fromEdgeId)>();
+
+            queue.Enqueue((sourceId, null));
+
+            while (queue.Count > 0)
+            {
+                var (currentNodeId, fromEdgeId) = queue.Dequeue();
+
+                if (!visited.Add((currentNodeId, fromEdgeId))) continue;
+                if (context.System.Components.Any(component => component.Id == currentNodeId && component.Category == ComponentCategory.Sink)) return true;
+
+                var edges = context.Graph.Edges.Where(e => e.ConnectedNodeIds.Contains(currentNodeId));
+
+                foreach (var edge in edges)
+                {
+                    if (edge.Id == fromEdgeId) continue;
+                    if (!CanFlowThroughPotential(currentNodeId, fromEdgeId, edge, toggleComponentId, context)) continue;
+                    foreach (var nextNodeId in edge.ConnectedNodeIds.Where(id => id != currentNodeId)) queue.Enqueue((nextNodeId, edge.Id));
+                }
+            }
+
+            return false;
         }
     }
 }
