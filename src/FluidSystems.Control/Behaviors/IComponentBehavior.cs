@@ -2,6 +2,7 @@
 {
     public interface IComponentBehavior
     {
+        string GetDescription();
         Dictionary<string, string> GetState();
     }
 }

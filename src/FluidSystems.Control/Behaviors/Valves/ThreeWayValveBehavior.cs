@@ -1,4 +1,5 @@
 ﻿using FluidSystems.Control.Core;
+using FluidSystems.Control.Resources;
 using FluidSystems.Core.Models.System;
 
 namespace FluidSystems.Control.Behaviors.Valves
@@ -23,5 +24,7 @@ namespace FluidSystems.Control.Behaviors.Valves
         {
             _isDefaultPosition = !_isDefaultPosition;
         }
+
+        public string GetDescription() => Messages.ThreeWayValveDescriptor;
     }
 }

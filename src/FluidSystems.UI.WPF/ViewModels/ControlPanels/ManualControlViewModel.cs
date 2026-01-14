@@ -18,6 +18,7 @@ namespace FluidSystems.UI.WPF.ViewModels.ControlPanels
         [NotifyCanExecuteChangedFor(nameof(ActivateCommand))]
         private bool _isBusy;
         [ObservableProperty] private string? _statusMessage;
+        [ObservableProperty] private string? _description;
 
         private bool CanActivate => HasBehavior && !IsBusy;
 
@@ -31,7 +32,9 @@ namespace FluidSystems.UI.WPF.ViewModels.ControlPanels
         public void Update(string selectedComopnentId)
         {
             _selectedComponentId = selectedComopnentId;
-            HasBehavior = _context.GetBehavior(selectedComopnentId) != null;
+            IComponentBehavior? behavior = _context.GetBehavior(selectedComopnentId);
+            HasBehavior = behavior != null;
+            Description = behavior?.GetDescription() ?? "";
         }
 
         [RelayCommand(CanExecute = nameof(CanActivate))]

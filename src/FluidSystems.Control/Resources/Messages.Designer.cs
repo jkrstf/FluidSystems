@@ -77,5 +77,23 @@ namespace FluidSystems.Control.Resources {
                 return ResourceManager.GetString("MixingSourcesText", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Activating this component toggles the routing mechanism, redirecting the fluid flow between the default path and the alternative path..
+        /// </summary>
+        internal static string ThreeWayValveDescriptor {
+            get {
+                return ResourceManager.GetString("ThreeWayValveDescriptor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Activating this component toggles its state between Open and Closed, allowing or blocking the passage of fluid or gas..
+        /// </summary>
+        internal static string TwoWayValuveDescriptor {
+            get {
+                return ResourceManager.GetString("TwoWayValuveDescriptor", resourceCulture);
+            }
+        }
     }
 }

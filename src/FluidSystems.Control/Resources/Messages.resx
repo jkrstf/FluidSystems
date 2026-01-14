@@ -123,4 +123,10 @@
   <data name="MixingSourcesText" xml:space="preserve">
     <value>Dangerous operation: Activating {0} would open a direct path between two sources.</value>
   </data>
+  <data name="ThreeWayValveDescriptor" xml:space="preserve">
+    <value>Activating this component toggles the routing mechanism, redirecting the fluid flow between the default path and the alternative path.</value>
+  </data>
+  <data name="TwoWayValuveDescriptor" xml:space="preserve">
+    <value>Activating this component toggles its state between Open and Closed, allowing or blocking the passage of fluid or gas.</value>
+  </data>
 </root>
